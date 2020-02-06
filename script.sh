@@ -16,7 +16,7 @@ sudo apt-get update -y
 sudo apt-get update -y
 
 # Enable Firewall
-sudo ufw enable 
+sudo ufw enable -y
 
 # Install OpenSSH and configure the firewall 
 sudo apt-get openssh-server -y
