@@ -24,11 +24,6 @@ sudo ufw enable
 # configure the firewall
 sudo ufw allow OpenSSH
 
-# Check exit code
-if [[ "${?}" -n0 0 ]]
-then
- echo "Failed to Ubuntu" >&2
- exit 1
-fi
+
 
 exit 0
