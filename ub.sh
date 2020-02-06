@@ -28,7 +28,7 @@ sudo ufw allow OpenSSH
 # Create a user that isn't root
 echo 'What would you like to call your none rooted user?'
 read $user_name
-sudo createuser $user_name
-echo 'Hello $user_name - You are now set up '
+sudo adduser $user_name
+echo 'Hello ' $user_name ' - welcome to the server!'
 
 exit 0
