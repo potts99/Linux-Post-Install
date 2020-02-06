@@ -15,11 +15,13 @@ sudo apt-get update -y
 # Upgrade the system
 sudo apt-get update -y
 
+# Install OpenSSH
+sudo apt-get openssh-server -y
+
 # Enable Firewall
 sudo ufw enable -y
 
-# Install OpenSSH and configure the firewall 
-sudo apt-get openssh-server -y
+# configure the firewall 
 sudo ufw allow OpenSSH -y
 
 # Check exit code
