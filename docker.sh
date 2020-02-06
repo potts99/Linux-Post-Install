@@ -39,4 +39,7 @@ su - ${USER}
 # Install Docker-Compose
 sudo apt-get install docker-compose -y 
 
+# Delete the script after it has be ran
+# sudo rm docker.sh
+
 exit 0
