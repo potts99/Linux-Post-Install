@@ -19,7 +19,7 @@ sudo apt-get update -y
 sudo apt-get openssh-server -y
 
 # Enable Firewall
-sudo ufw enable -y
+sudo ufw enable 
 
 # configure the firewall 
 sudo ufw allow OpenSSH
