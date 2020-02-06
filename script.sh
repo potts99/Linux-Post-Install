@@ -22,7 +22,7 @@ sudo apt-get openssh-server -y
 sudo ufw enable -y
 
 # configure the firewall 
-sudo ufw allow OpenSSH -y
+sudo ufw allow OpenSSH
 
 # Check exit code
 if [[ "${?}" -n0 0 ]]
