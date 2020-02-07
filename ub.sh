@@ -44,6 +44,31 @@ sudo chmod +x /etc/update-motd.d/05-info
 #Unattended-Upgrade::Automatic-Reboot "true"; 
 #}; " >> /etc/apt/apt.conf.d/50unattended-upgrades
 
+# Fail2Ban install 
+sudo apt-get install -y fail2ban
+sudo systemctl start fail2ban
+sudo systemctl enable fail2ban
+
+echo "
+[sshd]
+enabled = true
+port = 22
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 4
+" >> /etc/fail2ban/jail.local
+
+# SpeedTest Install
+sudo apt-get install speedtest-cli
+
+echo "
+########################
+
+In order to use type: speedtest-cli and press enter
+
+########################"
+
+
 
 
 exit 0
