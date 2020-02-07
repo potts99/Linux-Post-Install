@@ -12,6 +12,9 @@ fi
 # Update your system
 sudo apt update -y
 
+# Upgrade your system
+sudo apt upgrade -y
+
 # Install packages over https
 sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
 
