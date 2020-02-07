@@ -17,7 +17,7 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 
 # Install OpenSSH
-sudo apt-get openssh-server -y
+sudo apt-get install openssh-server -y
 
 # Enable Firewall
 sudo ufw enable 
@@ -29,8 +29,21 @@ sudo ufw allow OpenSSH
 echo "PermitRootLogin no" >> /etc/ssh/sshd_config 
 
 # Message of the day 
-sudo wget 
+sudo wget https://raw.githubusercontent.com/jwandrews99/Linux-Automation/master/motd.sh
 sudo mv motd.sh /etc/update-motd.d/05-info
 sudo chmod +x /etc/update-motd.d/05-info
+
+# Automatic downloads of updates
+# sudo apt-get install -y unattended-upgrades
+# echo "Unattended-Upgrade::Allowed-Origins {
+#   "${distro_id}:${distro_codename}-security";
+#//  "${distro_id}:${distro_codename}-updates";
+#//  "${distro_id}:${distro_codename}-proposed";
+#//  "${distro_id}:${distro_codename}-backports";
+
+#Unattended-Upgrade::Automatic-Reboot "true"; 
+#}; " >> /etc/apt/apt.conf.d/50unattended-upgrades
+
+
 
 exit 0
