@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# The goal for this is to auto install docker / docker-compose 
+# Goal: Script which automatically sets up a new Ubuntu Machine with Docker after installation
+# This is a basic install, easily configurable to your needs
 
 # Test to see if user is running with root privileges.
 if [[ "${UID}" -ne 0 ]]
@@ -9,8 +10,20 @@ then
  exit 1
 fi
 
-# Update your system
-sudo apt update -y
+# Ensure system is up to date
+sudo apt-get update -y 
+
+# Upgrade the system
+sudo apt-get update -y
+
+# Install OpenSSH
+sudo apt-get openssh-server -y
+
+# Enable Firewall
+sudo ufw enable 
+
+# configure the firewall
+sudo ufw allow OpenSSH
 
 # Install packages over https
 sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
@@ -43,3 +56,4 @@ sudo apt-get install docker-compose -y
 # sudo rm docker.sh
 
 exit 0
+
