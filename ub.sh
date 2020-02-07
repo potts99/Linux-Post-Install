@@ -13,7 +13,7 @@ fi
 sudo apt-get update -y 
 
 # Upgrade the system
-sudo apt-get update -y
+sudo apt-get upgrade -y
 
 # Install OpenSSH
 sudo apt-get openssh-server -y
