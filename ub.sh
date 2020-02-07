@@ -25,4 +25,12 @@ sudo ufw enable
 # configure the firewall
 sudo ufw allow OpenSSH
 
+# Disabling root login 
+echo "PermitRootLogin no" >> /etc/ssh/sshd_config 
+
+# Message of the day 
+sudo wget 
+sudo mv motd.sh /etc/update-motd.d/05-info
+sudo chmod +x /etc/update-motd.d/05-info
+
 exit 0
