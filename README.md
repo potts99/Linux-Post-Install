@@ -1,2 +1,2 @@
 # Linux-Automation
-Scripts to Automate Linux Set up's
+Scripts to Automate Linux Post Install
