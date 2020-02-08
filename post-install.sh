@@ -74,7 +74,13 @@ ForceCommand internal-sftp
 sudo service ssh restart
 
 # Docker option install 
-echo "Do you want to install docker? If so type y / If you dont want to install enter n"
+echo "
+######################################################################################################
+
+Do you want to install docker? If so type y / If you dont want to install enter n
+
+######################################################################################################
+"
 read $docker
 
 if [[ $docker -eq "y" ]] || [[ $docker -eq "yes" ]]; then
@@ -88,22 +94,37 @@ if [[ $docker -eq "y" ]] || [[ $docker -eq "yes" ]]; then
     su - ${USER}
     sudo apt-get install docker-compose -y 
 
-    echo "Congrats Docker has been installed"
+    echo "
+#####################################################################################################    
+                            Congrats Docker has been installed
+######################################################################################################
+"
     docker -v
 
 else 
     echo "Docker was not installed"
+    exit 1 
+  
 fi
 
 # Wireguard install
-echo "Would you like to install a wireguard VPN Server? If so enter y / If you dont want to install enter n"
+echo "
+######################################################################################################
+
+Would you like to install a wireguard VPN Server? If so enter y / If you dont want to install enter n
+
+######################################################################################################
+"
 read $vpn
 
 if [[ $vpn -eq "y" ]] || [ $vpn -eq "yes" ]]; then 
     wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
     bash wireguard-install.sh
+
 else 
     echo "Wireguard wasnt installed"
+    exit 1
+
 fi
 
 # Cleanup
