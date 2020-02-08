@@ -12,6 +12,6 @@ Scripts to Automate Linux Post Install
 
 # Whats on each script?
 
-- ub.sh includes the following / sys update / ufw firewall config / openssh / disable root ssh login / motd sys stats / speedtest / ftp server install and config / Fail2Ban install and config
+- ub.sh includes the following / sys update / ufw firewall config / openssh / disable root ssh login / motd sys stats / speedtest / SFTP server install and config / Fail2Ban install and config
 
 In order to use speedtest just use "speedtest" as the command in the cli.[ Click for more info.](https://github.com/sivel/speedtest-cli)
