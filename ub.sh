@@ -68,33 +68,17 @@ In order to use type: speedtest-cli and press enter
 
 ########################"
 
-# vsftpd for ftp server
-sudo apt install vsftpd -y 
-sudo rm /etc/vsftpd.conf # So we can start a fresh config
-cd /etc/
-sudo wget https://raw.githubusercontent.com/jwandrews99/Linux-Automation/master/misc/vsftpd.conf
-cd
+# SFTP Server / FTP server that runs over ssh
+echo "
+Match group sftp
+ChrootDirectory /home
+X11Forwarding no
+AllowTcpForwarding no
+ForceCommand internal-sftp
+" >> /etc/ssh/sshd_config
 
-# Configure firewall
-sudo ufw allow 20/tcp
-sudo ufw allow 21/tcp 
-sudo ufw allow 990/tcp
-sudo ufw allow 40000:50000/tcp # Range of passive ports 
+sudo service ssh restart
 
-sudo mkdir /{$USER}/ftpmain/ftp
-sudo chown nobody:nogroup /home/{$USER}/ftp #sets ownership 
-sudo mkdir /home/{$USER}/ftp/files
-sudo chown {$USER}:{$USER} /home/{$USER}/ftp/files
-echo "vsftpd test file" >> /home/{$USER}/ftp/files/test.txt
-
-echo "{$USER}" >> -a /etc/vsftpd.userlist
-
-sudo systemctl restart vsftpd
-
-# Securing FTP with TLS/SSL
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem
-
-sudo systemctl restart vsftpd
 
 
 exit 0
