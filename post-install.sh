@@ -90,8 +90,6 @@ if [[ $docker -eq "y" ]] || [[ $docker -eq "yes" ]]; then
     sudo apt-get update -y
     apt-cache policy docker-ce
     sudo apt install docker-ce -y
-    sudo usermod -aG docker ${USER}
-    su - ${USER}
     sudo apt-get install docker-compose -y 
 
     echo "
