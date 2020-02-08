@@ -82,7 +82,7 @@ sudo apt clean
 echo "Would you like to install wireguard vpn - If so type yes or y / if not type no?"
 read $answer 
 
-if [ $answer == "yes" ]; || [ $answer == "y" ];
+if [ $answer == "yes" ] || [ $answer == "y" ];
 then 
 sudo wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
 sudo bash wireguard-install.sh
