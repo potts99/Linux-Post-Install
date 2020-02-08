@@ -73,15 +73,42 @@ ForceCommand internal-sftp
 
 sudo service ssh restart
 
+# Docker option install 
+echo "Do you want to install docker? If so type y / If you dont want to install enter n"
+read $docker
+
+if [[ $docker == "y" ]]; then
+    sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    sudo apt-get update -y
+    apt-cache policy docker-ce
+    sudo apt install docker-ce -y
+    sudo usermod -aG docker ${USER}
+    su - ${USER}
+    sudo apt-get install docker-compose -y 
+
+    echo "Congrats Docker has been installed"
+    docker -v
+
+else 
+    echo "Docker was not installed"
+fi
+
+# Wireguard install
+echo "Would you like to install a wireguard VPN Server? If so enter y / If you dont want to install enter n"
+read $vpn
+
+if [[ $vpn == "y" ]]; then 
+    wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
+    bash wireguard-install.sh
+else 
+    echo "Wireguard wasnt installed"
+fi
 
 # Cleanup
 sudo apt autoremove
 sudo apt clean 
-
-# Wireguard
-sudo wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
-sudo bash wireguard-install.sh
-
 
 echo "
 #############################################################
@@ -93,4 +120,5 @@ In order to use SpeedTest - Just use "speedtest" in the cli
 Reboot your server to fully configure the vpn service
 #############################################################
 "
+
 exit 0
