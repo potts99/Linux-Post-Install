@@ -27,15 +27,16 @@ sudo ufw allow OpenSSH
 
 # Disabling root login 
 echo "PermitRootLogin no" >> /etc/ssh/sshd_config 
+echo "PermitEmptyPasswords no" /etc/ssh/sshd_config
 
 # Message of the day 
 sudo wget https://raw.githubusercontent.com/jwandrews99/Linux-Automation/master/misc/motd.sh
 sudo mv motd.sh /etc/update-motd.d/05-info
 sudo chmod +x /etc/update-motd.d/05-info
 
-# Automatic downloads of updates
-# sudo apt-get install -y unattended-upgrades
-# echo "Unattended-Upgrade::Allowed-Origins {
+# Automatic downloads of security updates
+sudo apt-get install -y unattended-upgrades
+echo "Unattended-Upgrade::Allowed-Origins {
 #   "${distro_id}:${distro_codename}-security";
 #//  "${distro_id}:${distro_codename}-updates";
 #//  "${distro_id}:${distro_codename}-proposed";
@@ -61,13 +62,6 @@ maxretry = 4
 # SpeedTest Install
 sudo apt-get install speedtest-cli -y
 
-echo "
-########################
-
-In order to use type: speedtest and press enter
-
-########################"
-
 # SFTP Server / FTP server that runs over ssh
 echo "
 Match group sftp
@@ -78,5 +72,24 @@ ForceCommand internal-sftp
 " >> /etc/ssh/sshd_config
 
 sudo service ssh restart
+
+
+# Cleanup
+sudo apt autoremove
+sudo apt clean
+
+
+echo"
+
+##############################################
+
+                A few tid bits
+
+
+
+
+
+##############################################
+"
 
 exit 0
