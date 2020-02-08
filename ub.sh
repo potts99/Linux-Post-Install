@@ -79,10 +79,10 @@ sudo apt autoremove
 sudo apt clean
 
 # Wireguard
-echo "Would you like to install wireguard vpn?"
+echo "Would you like to install wireguard vpn - If so type yes or y / if not type no?"
 read $answer 
 
-if [ $answer -eq "yes"]
+if [ $answer -eq "yes"] || [ $answer -eq "y"]
 then 
 sudo wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
 sudo bash wireguard-install.sh
@@ -90,7 +90,7 @@ else
     echo "wireguard not installed"      
 fi
 
-echo"
+echo "
 #############################################################
 
                 A few tid bits
