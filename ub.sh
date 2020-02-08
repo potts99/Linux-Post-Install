@@ -64,7 +64,7 @@ sudo apt-get install speedtest-cli -y
 echo "
 ########################
 
-In order to use type: speedtest-cli and press enter
+In order to use type: speedtest and press enter
 
 ########################"
 
@@ -78,7 +78,5 @@ ForceCommand internal-sftp
 " >> /etc/ssh/sshd_config
 
 sudo service ssh restart
-
-
 
 exit 0
