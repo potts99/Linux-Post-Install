@@ -76,19 +76,12 @@ sudo service ssh restart
 
 # Cleanup
 sudo apt autoremove
-sudo apt clean
+sudo apt clean 
 
 # Wireguard
-echo "Would you like to install wireguard vpn - If so type yes or y / if not type no?"
-read $answer 
-
-if [ "$answer" == "yes" ] || [ "$answer" == "y" ];
-then 
 sudo wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
 sudo bash wireguard-install.sh
-else 
-    echo "wireguard not installed"      
-fi
+
 
 echo "
 #############################################################
@@ -97,7 +90,7 @@ echo "
 
 In order to use SpeedTest - Just use "speedtest" in the cli
 
-
+Reboot your server to fully configure the vpn service
 #############################################################
 "
 exit 0
