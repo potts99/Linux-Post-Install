@@ -92,6 +92,15 @@ if [[ $docker -eq "y" ]] || [[ $docker -eq "yes" ]]; then
     sudo apt install docker-ce -y
     sudo apt-get install docker-compose -y 
 
+    echo " 
+    
+        Installing Portainer on port 9000
+
+    "
+
+    sudo docker volume create portainer_data
+    sudo docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
     echo "
 #####################################################################################################    
                             Congrats Docker has been installed
@@ -130,14 +139,20 @@ sudo apt autoremove
 sudo apt clean 
 
 echo "
-#############################################################
+######################################################################################################
 
-                A few tid bits
+                                        A few tid bits
 
 In order to use SpeedTest - Just use "speedtest" in the cli
 
 Reboot your server to fully configure the vpn service
-#############################################################
+
+When using the VPN service on a device simply use the config file in you home directory. 
+To create a new config enter  bash wireguard-install.sh in the cli and choose a new name
+
+If you installed Docker a portainer management image is running on ip:9090
+
+######################################################################################################
 "
 
 exit 0
