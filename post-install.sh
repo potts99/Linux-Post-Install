@@ -110,8 +110,7 @@ if [[ $docker -eq "y" ]] || [[ $docker -eq "yes" ]]; then
 
 else 
     echo "Docker was not installed"
-    exit 1 
-  
+ 
 fi
 
 # Wireguard install
@@ -128,10 +127,12 @@ if [[ $vpn -eq "y" ]] || [ $vpn -eq "yes" ]]; then
     wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
     bash wireguard-install.sh
 
-else 
+elif  [[ $vpn -eq "n" ]] || [ $vpn -eq "no" ]]; then 
     echo "Wireguard wasnt installed"
     exit 1
-
+else 
+    echo "Error Install Aborted!"
+    exit 1
 fi
 
 # Cleanup
@@ -150,7 +151,7 @@ Reboot your server to fully configure the vpn service
 When using the VPN service on a device simply use the config file in you home directory. 
 To create a new config enter  bash wireguard-install.sh in the cli and choose a new name
 
-If you installed Docker a portainer management image is running on ip:9090
+If you installed Docker a portainer management image is running on ip:9000
 
 ######################################################################################################
 "
