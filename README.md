@@ -1,5 +1,5 @@
 # Linux-Automation
-Scripts to Automate Linux Post Install
+Scripts to Automate Ubuntu / Debian Post Install
 
 # Why 
 - If you're like me and break stuff all the time, saving time by not having type out all the commands to set yout machine up post install.
