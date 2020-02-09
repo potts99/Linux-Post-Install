@@ -71,7 +71,7 @@ AllowTcpForwarding no
 ForceCommand internal-sftp
 " >> /etc/ssh/sshd_config
 
-sudo service ssh restart
+sudo service ssh restart  
 
 # Docker option install 
 echo "
