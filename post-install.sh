@@ -127,9 +127,12 @@ if [[ $vpn -eq "y" ]] || [ $vpn -eq "yes" ]]; then
     wget https://raw.githubusercontent.com/l-n-s/wireguard-install/master/wireguard-install.sh -O wireguard-install.sh
     bash wireguard-install.sh
 
-else 
+elif  [[ $vpn -eq "n" ]] || [ $vpn -eq "no" ]]; then 
     echo "Wireguard wasnt installed"
 
+else 
+    echo "Error Install Aborted!"
+    exit 1
 fi
 
 # Cleanup
