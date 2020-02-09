@@ -148,7 +148,7 @@ Reboot your server to fully configure the vpn service
 When using the VPN service on a device simply use the config file in you home directory. 
 To create a new config enter  bash wireguard-install.sh in the cli and choose a new name
 
-If you installed Docker a portainer management image is running on ip:9090
+If you installed Docker a portainer management image is running on ip:9000
 
 ######################################################################################################
 "
