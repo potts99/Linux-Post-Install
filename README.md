@@ -7,7 +7,6 @@ Scripts to Automate Linux Post Install
 - Simplicity / Save time after your install, wget the script raw and let it run.
 
 # Time
-
 - Post installs can take time, especially if you're trying to balance multiple things at once, run the script do something else, reply to that email and finish when its done. 
 
 # Whats on each script?
@@ -28,5 +27,5 @@ wget https://github.com/jwandrews99/Linux-Post-Install/blob/master/post-install.
 - A message of the day system stats
 - System Clean up after the install
 
-
 In order to use speedtest just use "speedtest" as the command in the cli.[ Click for more info.](https://github.com/sivel/speedtest-cli)
+
