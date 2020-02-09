@@ -129,7 +129,7 @@ if [[ $vpn -eq "y" ]] || [ $vpn -eq "yes" ]]; then
 
 elif  [[ $vpn -eq "n" ]] || [ $vpn -eq "no" ]]; then 
     echo "Wireguard wasnt installed"
-
+    exit 1
 else 
     echo "Error Install Aborted!"
     exit 1
