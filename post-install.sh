@@ -110,8 +110,7 @@ if [[ $docker -eq "y" ]] || [[ $docker -eq "yes" ]]; then
 
 else 
     echo "Docker was not installed"
-    exit 1 
-  
+ 
 fi
 
 # Wireguard install
@@ -130,7 +129,6 @@ if [[ $vpn -eq "y" ]] || [ $vpn -eq "yes" ]]; then
 
 else 
     echo "Wireguard wasnt installed"
-    exit 1
 
 fi
 
