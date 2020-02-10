@@ -29,3 +29,6 @@ wget https://raw.githubusercontent.com/jwandrews99/Linux-Post-Install/master/pos
 
 In order to use speedtest just use "speedtest" as the command in the cli.[ Click for more info.](https://github.com/sivel/speedtest-cli)
 
+# To Do
+
+Auto recongise the Os and choose the correct script to run
