@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Goal: Script which automatically sets up a new Ubuntu Machine after installation
-# This is a basic install, easily configurable to your needs
+# Goal: 
+# To create a script that finds the os the system is using and downloads & runs the script
+
 
 # Test to see if user is running with root privileges.
 if [[ "${UID}" -ne 0 ]]
@@ -10,3 +11,4 @@ then
  exit 1
 fi
 
+# Welcome
