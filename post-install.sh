@@ -340,7 +340,33 @@ setup_sftp() {
     sudo kill -SIGHUP $(pgrep -f "sshd -D")
 }
 
+# Message of the day 
+add_daymsg() {
+wget https://raw.githubusercontent.com/jwandrews99/Linux-Automation/master/misc/motd.sh
+sudo mv motd.sh /etc/update-motd.d/05-info
+sudo chmod +x /etc/update-motd.d/05-info
+}
 
+unattended_sec() {
+# Automatic downloads of security updates
+sudo apt-get install -y unattended-upgrades
+echo 'Unattended-Upgrade::Allowed-Origins {
+   "${distro_id}:${distro_codename}-security";
+//  "${distro_id}:${distro_codename}-updates";
+//  "${distro_id}:${distro_codename}-proposed";
+//  "${distro_id}:${distro_codename}-backports";
+}
+Unattended-Upgrade::Automatic-Reboot "true"; 
+};' | sudo tee -a /etc/apt/apt.conf.d/50unattended-upgrades
+}
+
+add_usersudo() {
+    apt install -y sudo useradd
+    useradd -m -s /bin/bash -U eljefe
+    usermod -aG sudo,adm,systemd-journal,netdev,lp eljefe
+    cp -r $HOME/.ssh /home/eljefe/.ssh
+    chown -R eljefe:eljefe /home/eljefe/.ssh
+}
 
 ###### Beginning of script   #####
 
@@ -378,13 +404,13 @@ read install_webserver
 
 case $install_webserver in
     Y)
-        echo_info "That's whats up."
+        echo_info "That's whats up. We'll configure that later"
         sleep 2
         echo_info "Installing a few packages first"
         sudo apt-get install --install-recommends tasksel gdebi dialog -y
             ;;
     y)
-        echo_info "That's whats up."
+        echo_info "That's whats up. We'll configure that later"
         sleep 2
         echo_info "Installing a few packages first"
         sudo apt-get install --install-recommends tasksel gdebi dialog -y
@@ -412,8 +438,9 @@ case $install_webserver in
             ;;
 esac
 
-cmd=(dialog --separate-output --checklist "Software To Install. Default is to Install None. Navigate with Up/Down Arrows. Select/Unselect with Spacebar. Hit Enter key When Finished To Continue. ESC key/Cancel exits and continues without installing any options" 22 126 16)
-options=(1 "OpenSSH server" off
+
+cmd=(dialog --separate-output --checklist "Software To Install. Default is to Install None. Navigate with Up/Down Arrows. Select/Unselect with Spacebar. Hit Enter key When Finished To Continue. ESC key/Cancel continues without installing any options" 22 126 16)
+options=(1 "OpenSSH server. Recommended even if already have ssh server running" on
          2 "Fail2ban" off
          3 "Speedtest-cli" off
          4 "Inxi: System/Hardware Identifier" off
@@ -429,12 +456,19 @@ options=(1 "OpenSSH server" off
          14 "YARN: Additional NodeJS packagemanager" off
          15 "FireJail: Application Sandbox" off
          16 "Your usual Linux packages (User configured)" off
-         17 "Harden Linux by loading Apparmor at boot" off)
+         17 "Harden Linux by loading Apparmor at boot" off
+         18 "Add motd message of the day" off
+         19 "Create user with sudo privilges" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
-echo_info "Ensuring system is up to date"
+echo_note " ********************************************* "
+echo -e "                                                 "
+echo_info "       Ensuring system is up to date            "
+echo -e "                                                 "
+echo_note " ********************************************* "
+
 sleep 1
-sudo DEBIAN_FRONTEND=noninteractive apt-get update -y 
+sudo DEBIAN_FRONTEND=noninteractive apt-get update 
 
 # Upgrade the system
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
@@ -494,70 +528,60 @@ do
         17)
             apparmor_grub
             ;;
+        18)
+            add_daymsg
+            ;;
+        19)
+            add_usersudo
+            ;;
+        
     esac
 done
 
 
-# Install OpenSSH
-sudo apt-get install openssh-server -y
-
-# Enable Firewall
-sudo ufw enable 
-
-# configure the firewall
-sudo ufw allow OpenSSH
 
 
-# Message of the day 
-sudo wget https://raw.githubusercontent.com/jwandrews99/Linux-Automation/master/misc/motd.sh
-sudo mv motd.sh /etc/update-motd.d/05-info
-sudo chmod +x /etc/update-motd.d/05-info
-
-# Automatic downloads of security updates
-sudo apt-get install -y unattended-upgrades
-echo "Unattended-Upgrade::Allowed-Origins {
-   "${distro_id}:${distro_codename}-security";
-//  "${distro_id}:${distro_codename}-updates";
-//  "${distro_id}:${distro_codename}-proposed";
-//  "${distro_id}:${distro_codename}-backports";
-
-#Unattended-Upgrade::Automatic-Reboot "true"; 
-#}; " >> /etc/apt/apt.conf.d/50unattended-upgrades
-
-
-# SFTP Server / FTP server that runs over ssh
-echo "
-Match group sftp
-ChrootDirectory /home
-X11Forwarding no
-AllowTcpForwarding no
-ForceCommand internal-sftp
-" >> /etc/ssh/sshd_config
-
-sudo kill -SIGHUP $(pgrep -f "sshd -D") 
-
-
-
-
-# Cleanup
-sudo apt autoremove
-sudo apt clean 
-
-echo_note "
-######################################################################################################"
+echo_note " ###################################################################################################### "
 echo_info "
                                         A few tid bits
 
-In order to use SpeedTest - Just use 'speedtest' in the cli
+- In order to use SpeedTest - Just use 'speedtest' in the cli
 
-Reboot your server to fully configure the vpn service
+- Reboot your server to fully configure the vpn service
 
-When using the VPN service on a device simply use the config file in you home directory. 
+- When using the VPN service on a device simply use the config file in you home directory. 
 To create a new config enter  bash wireguard-install.sh in the cli and choose a new name
 
-If you installed Docker a portainer management image is running on ip:9000 "
-echo_note "
-######################################################################################################
+- If you installed Docker a portainer management image is running on ip:9000 
+
+- Look in /etc/ssh/sshd_config.suggested for a hardened ssh configuration
+
+- The created user with sudo privileges needs a password. Give it a password with the following before blocking root logins: passwd username 
+
 "
+echo_note " ###################################################################################################### "
+
+sleep 7
+
+case $install_webserver in
+    Y)
+        echo_info "Lets install that web server"
+        sleep 2
+        sudo tasksel
+            ;;
+    y)
+        echo_info "Lets install that web server"
+        sleep 2
+        sudo tasksel
+            ;;
+    *)
+        echo_note "We're done here"
+            ;;
+esac
+
+echo_note "Cleaning Up."
+sudo apt autoremove
+sudo apt autoclean
+sudo apt clean 
 
 exit 0
