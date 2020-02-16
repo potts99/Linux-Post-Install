@@ -14,6 +14,7 @@ Ubuntu / Debian post install script
 ```
 wget https://raw.githubusercontent.com/jwandrews99/Linux-Post-Install/master/post-install.sh && bash post-install.sh
 ```
+What this script can do:
 - Sys updates 
 - OpenSSH install
 - Ufw config
@@ -22,9 +23,18 @@ wget https://raw.githubusercontent.com/jwandrews99/Linux-Post-Install/master/pos
 - Automatic security updates
 - SSH disable root login
 - SFTP server config
-- Optional install of Wireguard VPN server - credit to https://github.com/l-n-s/wireguard-install
-- Optional install for docker
+- Install of Wireguard VPN server - credit to https://github.com/l-n-s/wireguard-install
+- Install for docker & docker compose
+- Install Tor & torsocks
+- Install inxi system/hardware identifier
+- Install Google Cloud Platform SDK utils
+- Install NodeJs
+- Install Yarn
+- Install Firejail sandbox
+- Install Teamviewer 
 - A message of the day system stats
+- Install a webserver (Apache/Nginx)
+- Create a nonroot user with sudo privileges
 - System Clean up after the install
 
 In order to use speedtest just use "speedtest" as the command in the cli.[ Click for more info.](https://github.com/sivel/speedtest-cli)
