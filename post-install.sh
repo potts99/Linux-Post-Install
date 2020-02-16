@@ -27,6 +27,20 @@ general_linuxpkgs() {
     sudo DEBIAN_FRONTEND=noninteractive apt install htop git apt-transport-https zip unzip netcat nano wdiff -y
 }
 
+identify_machine() {
+    source /etc/*-release
+    arch="$(uname -m)"
+    kernel="$(uname -r)"
+    echo_debug "Operating System: "
+    echo_info "$DISTRIB_ID $DISTRIB_CODENAME $DISTRIB_RELEASE"
+    echo_debug "Architecture:"
+    echo_info "$arch"
+    echo_debug "Kernel version:"
+    echo_info "$kernel"
+}
+
+
+
 
 source ./functions.txt
 
@@ -41,6 +55,13 @@ then
  exit 1
 fi
 
+if [[ -z $(identify_machine | grep -e 'Ubuntu' -e 'Debian') ]]; then
+        echo -e "Sorry, this script only works on Ubuntu and Debian"
+        sleep 2
+        exit 1
+fi
+
+clear
 echo_note '
     ____                  __       
    / __ \  ___    ____   / /_      
@@ -60,8 +81,13 @@ echo_note '
 
 sleep 2
 
- 
-echo_prompt "Will you be installing a webserver?[y/n]"
+identify_machine
+
+sleep 2
+
+echo "                                              "
+echo "                                              "
+echo_prompt "Will you be installing a LAMP, DNS, mail, print, samba, or postgresql server? [y/n]"
 read install_webserver
 
 case $install_webserver in
@@ -104,21 +130,70 @@ case $install_webserver in
             ;;
 esac
 
+clear
 
-echo_prompt "Create a regular user with sudo privileges [y/n]"
+echo_prompt "Create a new regular user with sudo privileges? [y/n] "
 read create_user
 case $create_user in
     Y)
         echo_prompt "Enter username: "
         read new_user
-        add_usersudo
-        sleep 5
+        if [[ -n $(getent passwd | grep $new_user) ]]; then
+            echo_fail "User $new_user already exists!"
+            sleep 2
+            echo_prompt "Change password for $new_user? [y/n] "
+            read change_passwd
+            case $change_passwd in
+                y)
+                    echo_note "Ok, lets update that password"
+                    echo_info "Must be 8+ characters with mix of letters, digits, & symbols"
+                    echo_prompt "Enter password for new user: "
+                    read new_passwd2
+                    sudo echo -e "$new_passwd2\n$new_passwd2" | passwd $new_user > /dev/null 2>&1
+                    echo_note "Password for $new_user successfully changed to $new_passwd2"
+                        ;;
+                n)
+                    echo_note "Ok, continuing"
+                    sleep 2
+                        ;;
+            esac
+        else
+            echo_info "Must be 8+ characters with mix of letters, digits, & symbols"
+            echo_prompt "Enter password for new user: "
+            read new_passwd
+            add_usersudo
+            sleep 2
+        fi
             ;;
     y)
         echo_prompt "Enter username: "
         read new_user
-        add_usersudo
-        sleep 5
+        if [[ -n $(getent passwd | grep $new_user) ]]; then
+            echo_fail "User $new_user already exists!"
+            sleep 2
+            echo_prompt "Change password for $new_user? [y/n] "
+            read change_passwd
+            case $change_passwd in
+                y)
+                    echo_note "Ok, lets update that password"
+                    echo_info "Must be 8+ characters with mix of letters, digits, & symbols"
+                    echo_prompt "Enter password for new user: "
+                    read new_passwd2
+                    sudo echo -e "$new_passwd2\n$new_passwd2" | passwd $new_user > /dev/null 2>&1
+                    echo_note "Password for $new_user successfully changed to $new_passwd2"
+                        ;;
+                n)
+                    echo_note "Ok, continuing"
+                    sleep 2
+                        ;;
+            esac
+        else
+            echo_info "Must be 8+ characters with mix of letters, digits, & symbols"
+            echo_prompt "Enter password for new user: "
+            read new_passwd
+            add_usersudo
+            sleep 2
+        fi
             ;;
     N)
         echo_note "Fsho."
@@ -152,16 +227,15 @@ options=(1 "OpenSSH server. Recommended even if already have ssh server running"
          7 "Docker-Compose: Simplified Docker Container configuration" off
          8 "Wireguard VPN server" off
          9 "TeamViewer: Remote Desktop Sharing" off
-         10 "Tor: Onion Routing for (kind of) Anonymous Secure Browsing" off
-         11 "OnionShare: Share Files Securely Over Tor Network && TorBrowser-Launcher (Needs Tor)" off
-         12 "Google Cloud Platform SDK CommandLine Tools" off
-         13 "NodeJS 12 && NPM package manager" off
-         14 "YARN: Additional NodeJS packagemanager" off
-         15 "FireJail: Application Sandbox" off
-         16 "Your usual Linux packages (User configured at top of this script)" off
-         17 "Harden Linux by loading Apparmor at boot" off
-         18 "Add System Stats message of the day" off
-         19 "Set up Unattended Updates (security updates only)" off)
+         10 "Tor & torsocks: Onion Routing" off
+         11 "Google Cloud Platform SDK" off
+         12 "NodeJS 12" off
+         13 "Yarn: NodeJS package manager" off
+         14 "FireJail: Application Sandbox" off
+         15 "Your usual Linux packages (User configured at top of this script)" off
+         16 "Harden Linux by loading Apparmor at boot" off
+         17 "Add System Stats message of the day" off
+         18 "Set up Unattended Updates (security updates only)" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
 echo_note " ********************************************* "
@@ -211,30 +285,27 @@ do
             install_tor
             ;;
         11)
-            install_micahs
-            ;;
-        12)
             install_googlecloudSDK
             ;;
-        13)
+        12)
             install_node
             ;;
-        14)
+        13)
             install_yarn
             ;;
-        15)
+        14)
             install_firejail
             ;;
-        16)
+        15)
             general_linuxpkgs
             ;;
-        17)
+        16)
             apparmor_grub
             ;;
-        18)
+        17)
             add_daymsg
             ;;
-        19)
+        18)
             unattended_sec
             ;;
     esac
@@ -258,8 +329,6 @@ To create a new config enter  bash wireguard-install.sh in the cli and choose a 
 
 - Look in /etc/ssh/sshd_config.suggested for a hardened ssh configuration
 
-- Dont forget to give $new_user a password for using sudo before disabling root login!
-
 "
 echo_note " ###################################################################################################### "
 
@@ -269,10 +338,14 @@ case $install_webserver in
     Y)
         echo_note "Lets install that web server"
         sleep 2
+        echo_note "Select the server(s) you want to install"
+        sleep 2
         sudo tasksel
             ;;
     y)
         echo_note "Lets install that web server"
+        sleep 2
+        echo_note "Select the server(s) you want to install"
         sleep 2
         sudo tasksel
             ;;

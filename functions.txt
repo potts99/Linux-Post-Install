@@ -1,10 +1,12 @@
+#!/bin/bash
+
 ## App installing functions
 
 install_teamviewer() {
     echo_info " *** installing Teamviewer for Linux *** "
-    cd ~/Downloads
     wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
     sudo gdebi -n teamviewer_amd64.deb
+    rm -rf $HOME/Downloads/teamviewer_amd64.deb
 }
 
 install_tor() {
@@ -17,16 +19,9 @@ install_tor() {
     sudo apt install -y tor deb.torproject.org-keyring torsocks
 }
 
-install_micahs() {
-    echo_info " *** Installing Micah F Lee's repository from github.com/micahflee; includes Onionshare and Torbrowser-launcher"
-    sudo DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:micahflee/ppa --yes
-    sudo apt update
-    sudo apt install -y onionshare torbrowser-launcher
-}
 
 install_node() {
     echo_info " *** Installing NodeJS 12 and npm node package manager *** "
-    cd ;
     sudo apt install gcc g++ make -y
     curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
     sudo -v
@@ -44,6 +39,9 @@ local_globalnode() {
 
 install_yarn() {
     echo_info " *** Installing Yarn: NodeJS package manager *** "
+    if [[ -z $(which node) ]]; then
+        install_node
+    fi
     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo DEBIAN_FRONTEND=noninteractive apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
     sudo apt-get update && sudo apt-get install -y yarn
@@ -323,7 +321,7 @@ setup_sftp() {
 
 # Message of the day 
 add_daymsg() {
-    echo_note " *** Setting System stats Message of The Day *** 
+    echo_note " *** Setting System stats Message of The Day *** "
 wget https://raw.githubusercontent.com/jwandrews99/Linux-Automation/master/misc/motd.sh
 sudo mv motd.sh /etc/update-motd.d/05-info
 sudo chmod +x /etc/update-motd.d/05-info
@@ -343,14 +341,15 @@ Unattended-Upgrade::Automatic-Reboot "true";
 
 add_usersudo() {
     echo_note " *** Creating new user with sudo privileges *** "
-    apt install -y sudo $new_user
     useradd -m -s /bin/bash -U $new_user
     usermod -aG sudo,adm,systemd-journal,netdev,lp $new_user
-    if [[ -n $(ls -al $HOME/.ssh/authorized_keys) ]]; then
-        echo_note "Copying authorized_keys file to new user"
+    sudo echo -e "$new_passwd\n$new_passwd" | passwd $new_user > /dev/null 2>&1
+    if [[ -a $HOME/.ssh/authorized_keys ]]; then
+        echo_note "Copying SSH authorized_keys file to new user"
         sleep 2
         cp -r $HOME/.ssh /home/$new_user/.ssh
         chown -R $new_user:$new_user /home/$new_user/.ssh
     fi
-    
+    echo_note "New user $new_user successfully created with password of $new_passwd"
+    sleep 2
 }
